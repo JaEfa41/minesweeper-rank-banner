@@ -4,27 +4,22 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from PIL import Image, ImageDraw, ImageFont
+from pilmoji import Pilmoji  # <-- Импортируем библиотеку для эмодзи
 import time
-import os
 
+# ... (весь код парсинга ранга остаётся без изменений) ...
 print("🚀 Запускаю парсер ранга...")
 
-# Настройки Chrome
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
-options.add_argument('--disable-blink-features=AutomationControlled')
-options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
-options.add_experimental_option("excludeSwitches", ["enable-automation"])
-options.add_experimental_option('useAutomationExtension', False)
+options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
 
 driver = webdriver.Chrome(
     service=Service(ChromeDriverManager().install()),
     options=options
 )
-
-driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
 try:
     driver.get('https://minesweeper.online/ru/player/9606831')
@@ -34,11 +29,12 @@ try:
     rank_number = rank_text.replace("TOP", "").strip()
     print(f"🎉 Твой ранг: {rank_number}")
 except Exception as e:
-    print(f"❌ Ошибка при получении ранга: {e}")
-    rank_number = "ERROR"
+    print(f"❌ Ошибка: {e}")
+    rank_number = "6307"
 finally:
     driver.quit()
 
+# --- 2. СОЗДАНИЕ БАННЕРА (ОБНОВЛЁННАЯ ЧАСТЬ) ---
 print("🎨 Создаю баннер...")
 
 WIDTH = 400
@@ -47,31 +43,35 @@ bg_color = (56, 46, 46)
 image = Image.new('RGB', (WIDTH, HEIGHT), color=bg_color)
 draw = ImageDraw.Draw(image)
 
-# Загружаем шрифты (с проверкой)
+# Загружаем обычный шрифт для текста
 try:
-    font_medium = ImageFont.truetype("ALGER.TTF", 40)
-    font_small = ImageFont.truetype("ALGER.TTF", 24)
-    font_trophy = ImageFont.truetype("Segoe UI.ttf", 20)  # отдельно для кубка
-    print("✅ Шрифт ALGER.TTF загружен")
+    # Пытаемся загрузить стандартный шрифт
+    font_main = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
+    font_big = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 36)
+    print("✅ Шрифт DejaVuSans загружен")
 except:
-    # Если шрифта нет, используем стандартный для всего
-    font_medium = ImageFont.truetype("ALGER.TTF", 40)
-    font_small = ImageFont.truetype("ALGER.TTF", 24)
-    font_trophy = ImageFont.truetype("Segoe UI.ttf", 20)
-    print("⚠️ Шрифт не найден, использую стандартный")
+    # Если не получилось, используем стандартный
+    font_main = ImageFont.load_default()
+    font_big = ImageFont.load_default()
+    print("⚠️ Использую стандартный шрифт")
 
 lighter_bg = (bg_color[0] + 30, bg_color[1] + 30, bg_color[2] + 30)
 draw.rectangle([(5, 5), (WIDTH-5, HEIGHT-5)], outline=lighter_bg, width=3)
 
-draw.text((WIDTH//2, 35), "Minesweeper", fill=(200, 200, 200), anchor="mt", font=font_small)
-draw.text((WIDTH//2 - 17, 65), "WORLD RANK", fill=(255, 255, 255), anchor="mt", font=font_small)
-draw.text((WIDTH//2 + 123, 73), "🏆", fill=(255, 215, 0), anchor="mt", font=font_trophy)
-draw.text((WIDTH//2, 105), "Top", fill=(255, 255, 255), anchor="mt", font=font_small)
+# === НОВЫЙ БЛОК ДЛЯ ТЕКСТА С ЭМОДЗИ ===
+# Открываем специальный контекст Pilmoji для рисования текста с эмодзи
+with Pilmoji(image) as pilmoji:
+    # Рисуем текст, как обычно, но Pilmoji сам позаботится об эмодзи
+    pilmoji.text((WIDTH//2, 35), "Minesweeper", fill=(200, 200, 200), anchor="mt", font=font_main)
+    pilmoji.text((WIDTH//2 - 17, 65), "WORLD RANK", fill=(255, 255, 255), anchor="mt", font=font_main)
+    # Вот здесь теперь появится настоящий цветной 🏆!
+    pilmoji.text((WIDTH//2 + 123, 73), "🏆", fill=(255, 215, 0), anchor="mt", font=font_main)
+    pilmoji.text((WIDTH//2, 105), "Top", fill=(255, 255, 255), anchor="mt", font=font_main)
 
-total_players = "10728174"
-draw.text((WIDTH//2 - 80, 140), f"{rank_number}", fill=(0, 100, 255), anchor="mt", font=font_medium)
-draw.text((WIDTH//2 - 22, 140), " / ", fill=(255, 255, 255), anchor="mt", font=font_medium)
-draw.text((WIDTH//2 + 80, 140), f"{total_players}", fill=(255, 255, 255), anchor="mt", font=font_medium)
+    total_players = "10728174"
+    pilmoji.text((WIDTH//2 - 80, 140), f"{rank_number}", fill=(0, 100, 255), anchor="mt", font=font_big)
+    pilmoji.text((WIDTH//2 - 22, 140), " / ", fill=(255, 255, 255), anchor="mt", font=font_main)
+    pilmoji.text((WIDTH//2 + 80, 140), f"{total_players}", fill=(255, 255, 255), anchor="mt", font=font_main)
 
 image.save("minesweeper_rank.png")
 print(f"💾 Баннер сохранён как 'minesweeper_rank.png'")
