@@ -9,7 +9,7 @@ import os
 
 print("🚀 Запускаю парсер ранга...")
 
-# Настройки Chrome, чтобы маскироваться под обычного пользователя
+# Настройки Chrome
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--no-sandbox')
@@ -24,12 +24,11 @@ driver = webdriver.Chrome(
     options=options
 )
 
-# Дополнительная маскировка
 driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
 try:
     driver.get('https://minesweeper.online/ru/player/9606831')
-    time.sleep(5)  # Увеличил время ожидания
+    time.sleep(5)
     rank_element = driver.find_element(By.CLASS_NAME, "top-badge")
     rank_text = rank_element.text
     rank_number = rank_text.replace("TOP", "").strip()
@@ -48,16 +47,17 @@ bg_color = (56, 46, 46)
 image = Image.new('RGB', (WIDTH, HEIGHT), color=bg_color)
 draw = ImageDraw.Draw(image)
 
-# Загружаем шрифт (если есть)
+# Загружаем шрифты (с проверкой)
 try:
     font_medium = ImageFont.truetype("ALGER.TTF", 40)
     font_small = ImageFont.truetype("ALGER.TTF", 24)
-    font_large = ImageFont.truetype("ALGER.TTF", 20)
+    font_trophy = ImageFont.truetype("ALGER.TTF", 20)  # отдельно для кубка
     print("✅ Шрифт ALGER.TTF загружен")
 except:
+    # Если шрифта нет, используем стандартный для всего
     font_medium = ImageFont.load_default()
     font_small = ImageFont.load_default()
-    font_large = ImageFont.load_default()
+    font_trophy = ImageFont.load_default()
     print("⚠️ Шрифт не найден, использую стандартный")
 
 lighter_bg = (bg_color[0] + 30, bg_color[1] + 30, bg_color[2] + 30)
@@ -65,7 +65,7 @@ draw.rectangle([(5, 5), (WIDTH-5, HEIGHT-5)], outline=lighter_bg, width=3)
 
 draw.text((WIDTH//2, 35), "Minesweeper", fill=(200, 200, 200), anchor="mt", font=font_small)
 draw.text((WIDTH//2 - 17, 65), "WORLD RANK", fill=(255, 255, 255), anchor="mt", font=font_small)
-draw.text((WIDTH//2 + 123, 73), "🏆", fill=(255, 215, 0), anchor="mt", font=font_large)
+draw.text((WIDTH//2 + 123, 73), "🏆", fill=(255, 215, 0), anchor="mt", font=font_trophy)
 draw.text((WIDTH//2, 105), "Top", fill=(255, 255, 255), anchor="mt", font=font_small)
 
 total_players = "10728174"
