@@ -51,7 +51,7 @@ draw = ImageDraw.Draw(image)
 try:
     font_medium = ImageFont.truetype("ALGER.TTF", 40)
     font_small = ImageFont.truetype("ALGER.TTF", 24)
-    font_trophy = ImageFont.truetype("arial.ttf", 20)  # отдельно для кубка
+    font_trophy = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 20)  # отдельно для кубка
     print("✅ Шрифт ALGER.TTF загружен")
 except:
     # Если шрифта нет, используем стандартный для всего
