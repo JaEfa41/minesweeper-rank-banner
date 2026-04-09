@@ -65,7 +65,7 @@ draw.rectangle([(5, 5), (WIDTH-5, HEIGHT-5)], outline=lighter_bg, width=3)
 
 draw.text((WIDTH//2, 35), "Minesweeper", fill=(200, 200, 200), anchor="mt", font=font_small)
 draw.text((WIDTH//2 - 17, 65), "WORLD RANK", fill=(255, 255, 255), anchor="mt", font=font_small)
-draw.text((WIDTH//2 + 123, 73), "🏆", fill=(255, 215, 0), anchor="mt", font=font_default)
+draw.text((WIDTH//2 + 123, 73), "🏆", fill=(255, 215, 0), anchor="mt", font=font_trophy)
 draw.text((WIDTH//2, 105), "Top", fill=(255, 255, 255), anchor="mt", font=font_small)
 
 total_players = "10728174"
