@@ -66,7 +66,7 @@ with Pilmoji(image) as pilmoji:
     draw.text((WIDTH//2, 35), "Minesweeper", fill=(200, 200, 200), anchor="mt", font=font_small)
     draw.text((WIDTH//2 - 17, 65), "WORLD RANK", fill=(255, 255, 255), anchor="mt", font=font_small)
     # Вот здесь теперь появится настоящий цветной 🏆!
-    pilmoji.text((WIDTH//2 + 53, 65), "🏆", fill=(255, 215, 0), anchor="mt", font=font_main)
+    pilmoji.text((WIDTH//2 + 67, 67), "🏆", fill=(255, 215, 0), anchor="mt", font=font_main)
     draw.text((WIDTH//2, 105), "Top", fill=(255, 255, 255), anchor="mt", font=font_small)
 
     total_players = "10728174"
