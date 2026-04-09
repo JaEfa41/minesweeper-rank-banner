@@ -49,7 +49,6 @@ try:
     font_medium = ImageFont.truetype("ALGER.TTF", 40)
     font_small = ImageFont.truetype("ALGER.TTF", 24)
     font_main = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
-    font_big = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 36)
     print("✅ Шрифт DejaVuSans загружен")
 except:
     # Если не получилось, используем стандартный
@@ -64,16 +63,16 @@ draw.rectangle([(5, 5), (WIDTH-5, HEIGHT-5)], outline=lighter_bg, width=3)
 # Открываем специальный контекст Pilmoji для рисования текста с эмодзи
 with Pilmoji(image) as pilmoji:
     # Рисуем текст, как обычно, но Pilmoji сам позаботится об эмодзи
-    pilmoji.text((WIDTH//2, 35), "Minesweeper", fill=(200, 200, 200), anchor="mt", font=font_small)
-    pilmoji.text((WIDTH//2 - 17, 65), "WORLD RANK", fill=(255, 255, 255), anchor="mt", font=font_small)
+    draw.text((WIDTH//2, 35), "Minesweeper", fill=(200, 200, 200), anchor="mt", font=font_small)
+    draw.text((WIDTH//2 - 17, 65), "WORLD RANK", fill=(255, 255, 255), anchor="mt", font=font_small)
     # Вот здесь теперь появится настоящий цветной 🏆!
     pilmoji.text((WIDTH//2 + 123, 73), "🏆", fill=(255, 215, 0), anchor="mt", font=font_main)
-    pilmoji.text((WIDTH//2, 105), "Top", fill=(255, 255, 255), anchor="mt", font=font_small)
+    draw.text((WIDTH//2, 105), "Top", fill=(255, 255, 255), anchor="mt", font=font_small)
 
     total_players = "10728174"
-    pilmoji.text((WIDTH//2 - 80, 140), f"{rank_number}", fill=(0, 100, 255), anchor="mt", font=font_medium)
-    pilmoji.text((WIDTH//2 - 22, 140), " / ", fill=(255, 255, 255), anchor="mt", font=font_medium)
-    pilmoji.text((WIDTH//2 + 80, 140), f"{total_players}", fill=(255, 255, 255), anchor="mt", font=font_medium)
+    draw.text((WIDTH//2 - 80, 140), f"{rank_number}", fill=(0, 100, 255), anchor="mt", font=font_medium)
+    draw.text((WIDTH//2 - 22, 140), " / ", fill=(255, 255, 255), anchor="mt", font=font_medium)
+    draw.text((WIDTH//2 + 80, 140), f"{total_players}", fill=(255, 255, 255), anchor="mt", font=font_medium)
 
 image.save("minesweeper_rank.png")
 print(f"💾 Баннер сохранён как 'minesweeper_rank.png'")
