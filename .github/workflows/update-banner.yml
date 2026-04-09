@@ -1,0 +1,27 @@
+name: Update Banner
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - run: pip install -r requirements.txt
+      
+      - run: python sapper_banner.py
+      
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "bot@github.com"
+          git add minesweeper_rank.png
+          git diff --quiet && git diff --staged --quiet || git commit -m "Обновлён баннер"
+          git push
